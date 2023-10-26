@@ -13,7 +13,7 @@ router.get('', (req, res, next) => {
 router.post('', (req, res, next) => {
     try{
         if (!req.body.name && !req.body.price){
-            throw {message: "item name and price required", status: 403};
+            throw {message: "item name and price required", status: 404};
         } else {
         items.push(req.body);
         res.status(201).json({"added": req.body});
@@ -26,9 +26,9 @@ router.post('', (req, res, next) => {
 router.get('/:name', (req, res, next) => {
     try{
         if (!items.find(item => item.name === req.params.name)){
-            throw {message: "item does not exist", status: 403};
+            throw {message: "item does not exist", status: 404};
         } else {
-            const item = items.find(item => item.name === req.params.name);
+            item = items.find(item => item.name === req.params.name);
             res.json(item);
         }
     } catch (e){
@@ -41,8 +41,8 @@ router.patch('/:name', (req, res) => {
         let item = items.find(item => item.name === req.params.name);
         item.name = req.body.name;
         item.price = req.body.price;
-    
-    res.json({"updated": {
+
+        res.json({"updated": {
         "name": item.name,
         "price": item.price
     }});
